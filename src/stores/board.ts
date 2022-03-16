@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
-import type { Column } from '../types'
+import type { Column, Task } from '../types'
+import { uuid } from './utils'
 
 export const boardColumns = defineStore({
   id: 'board',
@@ -18,6 +19,15 @@ export const boardColumns = defineStore({
         tasks : []
       }
       this.columns.push(newCol)
+    },
+
+    addTask(taskName : string, colIndex : number) {
+      const newTask: Task = {
+        name: taskName,
+        description: 'string',
+        id: uuid()
+      }
+      this.columns[colIndex].tasks.push(newTask)
     }
   }
 })
