@@ -28,9 +28,11 @@ const addColumn = () => {
 </script>
 
 <template>
-  <div class="board h-screen overflow-auto px-3 py-3 scrollbar scrollbar-thumb-gray-600 scrollbar-thin scrollbar-track-gray-900" @click.self="toggleColNameForm(false)">
+  <div 
+    class="board h-screen overflow-auto px-3 py-3 scrollbar scrollbar-thumb-gray-600 scrollbar-thin scrollbar-track-gray-900" 
+    @click.self="toggleColNameForm(false)">
     <div class="flex justify-start items-start gap-5">
-      
+
       <BoardColumn 
         v-for="(column, colIndex) in trelloBoard.columns" 
         :key="colIndex"
@@ -56,7 +58,9 @@ const addColumn = () => {
             :class="!showlistControl ? 'h-0 overflow-hidden' : 'h-8'">
             <button 
               @click="addColumn" 
-              class="bg-blue-600 py-2 px-[10px] rounded-sm text-sm text-white hover:bg-blue-700 transition-colors ease-out duration-300">Add list</button>
+              class="bg-blue-600 py-2 px-[10px] rounded-sm text-sm text-white hover:bg-blue-700 transition-colors ease-out duration-300">
+                Add list
+              </button>
             <svg 
               @click="toggleColNameForm(false)" 
               class="h-6 w-6 text-gray-700 transition-colors ease-out duration-200 hover:text-gray-900" 

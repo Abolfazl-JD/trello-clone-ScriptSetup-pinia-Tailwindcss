@@ -56,9 +56,9 @@ const addNewTask = () => {
         />
 
         <p 
-          @click="toggleTaskNameForm(true)" 
-          v-if="!showTaskNameForm" 
-          class="bg-transparent text-gray-500 pl-3 mt-3 py-1 transition-colors ease-out duration-200 rounded hover:bg-gray-400/50 hover:text-gray-700">
+            @click="toggleTaskNameForm(true)" 
+            v-if="!showTaskNameForm" 
+            class="bg-transparent text-gray-500 pl-3 mt-3 py-1 transition-colors ease-out duration-200 rounded hover:bg-gray-400/50 hover:text-gray-700">
             + Add a card
         </p>
         <template v-else>
