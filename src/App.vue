@@ -29,11 +29,12 @@ const addColumn = () => {
 </script>
 
 <template>
+
   <div 
     class="board h-screen overflow-auto px-3 py-3 scrollbar scrollbar-thumb-gray-600 scrollbar-thin scrollbar-track-gray-900" 
     @click.self="toggleColNameForm(false)">
     <div class="flex justify-start items-start gap-5">
-
+      
       <BoardColumn 
         v-for="(column, colIndex) in trelloBoard.columns" 
         :key="colIndex"

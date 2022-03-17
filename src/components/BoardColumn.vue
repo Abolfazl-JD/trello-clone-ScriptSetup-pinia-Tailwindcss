@@ -68,7 +68,7 @@ const deleteColumn = () => {
             @click="visibleEditColForm"
             class="grow">
             <h3 v-if="!editColName" class="font-bold text-cyan-900 pl-2">
-              {{ props.column.name }}
+              {{ column.name }}
             </h3>
             <input
               v-else
@@ -95,7 +95,7 @@ const deleteColumn = () => {
         </div>
 
         <BoardTask 
-          v-for="(task, taskIndex) in props.column.tasks"
+          v-for="(task, taskIndex) in column.tasks"
           :key="task.id"
           :task="task"
           :taskIndex="taskIndex"
