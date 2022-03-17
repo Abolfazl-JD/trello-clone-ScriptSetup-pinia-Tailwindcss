@@ -30,21 +30,67 @@ const addNewTask = () => {
     if(newTaskName.value){
         trelloBoard.addTask(newTaskName.value, props.colIndex)
         newTaskName.value = ''
-        showlistControl.value = false
-        showTaskNameForm.value = false
+        textarea.value?.focus()
     }
 }
 
+
+const editColName = ref(false)
+const newColName = ref(props.column.name)
+const colNameForm = ref<HTMLInputElement | null>(null)
+
+const visibleEditColForm = () => {
+  editColName.value = true
+    setTimeout(() => {
+      colNameForm.value?.select()
+    }, 50)
+}
+
+const changeColName = () => {
+  editColName.value = false
+  if(newColName.value){
+    trelloBoard.editColName(props.colIndex, newColName.value)
+  }
+  else {
+    newColName.value = props.column.name
+  }
+}
+
+const deleteColumn = () => {
+  trelloBoard.archiveColumn(props.colIndex)
+}
 </script>
 
 <template>
     <div class="min-w-[280px] bg-gray-300 p-2 rounded-lg cursor-pointer">
-        <div class="flex justify-between mb-2 px-2">
-          <h3 class="font-bold text-cyan-900">
+        <div class="flex justify-between mb-2 space-x-2">
+          <div 
+            @click="visibleEditColForm"
+            class="grow">
+            <h3 v-if="!editColName" class="font-bold text-cyan-900 pl-2">
               {{ props.column.name }}
-          </h3>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+            </h3>
+            <input
+              v-else
+              v-model="newColName" 
+              ref="colNameForm"
+              @blur="changeColName"
+              @keyup.enter="changeColName"
+              @keyup.esc="changeColName"
+              type="text" 
+              placeholder="Enter list title..."
+              class="px-2 py-1 text-sm w-full focus:outline-blue-600"
+              autofocus>
+          </div>
+          <svg 
+            @click="deleteColumn" 
+            class="w-4 text-gray-500 h-auto" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor" 
+            stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
           </svg>
         </div>
 

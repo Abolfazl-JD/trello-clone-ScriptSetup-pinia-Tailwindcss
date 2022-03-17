@@ -23,6 +23,7 @@ const addColumn = () => {
   if(newColumnName.value) {
     trelloBoard.addColumn(newColumnName.value)
     newColumnName.value = ''
+    formInp.value?.focus()
   }
 }
 </script>

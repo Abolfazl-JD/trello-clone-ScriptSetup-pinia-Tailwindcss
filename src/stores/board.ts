@@ -28,6 +28,14 @@ export const boardColumns = defineStore({
         id: uuid()
       }
       this.columns[colIndex].tasks.push(newTask)
+    },
+
+    editColName(colIndex : number, newColName: string) {
+      this.columns[colIndex].name = newColName
+    },
+
+    archiveColumn(colIndex : number) {
+      this.columns.splice(colIndex, 1)
     }
   }
 })
