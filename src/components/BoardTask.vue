@@ -5,7 +5,8 @@ import EditModal from './Modal.vue'
 
 interface propsType{
     task : Task,
-    taskIndex : number
+    taskIndex : number,
+    colIndex: number
 }
 
 const props = defineProps<propsType>()
@@ -26,6 +27,9 @@ const showModal = ref(false)
     <EditModal 
         v-if="showModal"
         :task="task"
+        @hide-modal="showModal = false"
+        :colIndex="colIndex"
+        :taskIndex="taskIndex"
     />
 </template>
 

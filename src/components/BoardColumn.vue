@@ -99,6 +99,7 @@ const deleteColumn = () => {
           :key="task.id"
           :task="task"
           :taskIndex="taskIndex"
+          :colIndex="colIndex"
         />
 
         <p 

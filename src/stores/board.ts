@@ -36,6 +36,10 @@ export const boardColumns = defineStore({
 
     archiveColumn(colIndex : number) {
       this.columns.splice(colIndex, 1)
+    },
+
+    editTaskName(colIndex : number, taskIndex : number, newTaskName : string) {
+      this.columns[colIndex].tasks[taskIndex].name = newTaskName
     }
   }
 })
