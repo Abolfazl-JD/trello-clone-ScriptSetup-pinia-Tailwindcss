@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
-import type { Column, Task } from '../types'
+import type { Column, Task, SentTask } from '../types'
 import { uuid } from './utils'
 
 export const boardColumns = defineStore({
@@ -24,7 +24,10 @@ export const boardColumns = defineStore({
     addTask(taskName : string, colIndex : number) {
       const newTask: Task = {
         name: taskName,
-        description: 'string',
+        description: '',
+        date: '',
+        time: '',
+        completed : false,
         id: uuid()
       }
       this.columns[colIndex].tasks.push(newTask)
@@ -38,8 +41,8 @@ export const boardColumns = defineStore({
       this.columns.splice(colIndex, 1)
     },
 
-    editTaskName(colIndex : number, taskIndex : number, newTaskName : string) {
-      this.columns[colIndex].tasks[taskIndex].name = newTaskName
+    editTask(task : Task, newTask : SentTask) {
+      Object.assign(task, newTask)
     }
   }
 })

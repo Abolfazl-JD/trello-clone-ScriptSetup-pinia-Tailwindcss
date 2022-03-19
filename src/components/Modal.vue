@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import type {Task} from '../types'
+import type {Task, SentTask} from '../types'
 import {boardColumns} from '../stores/board'
 
 interface PropsType{
     task : Task,
-    colIndex : number,
-    taskIndex : number
 }
 
 const props = defineProps<PropsType>()
@@ -23,20 +21,29 @@ onMounted(() => {
 
 const trelloBoard = boardColumns()
 const editedTaskName = ref(props.task.name)
-const taskDescription = ref('')
-const taskDate = ref('')
-const taskTime = ref('')
-const taskDone = ref(false)
+const taskDescription = ref(props.task.description)
+const taskDate = ref(props.task.date)
+const taskTime = ref(props.task.time)
+const taskDone = ref(props.task.completed)
 
-const editTaskName = () => {
-    if(editedTaskName.value) 
-    trelloBoard.editTaskName(props.colIndex, props.taskIndex, editedTaskName.value)
-    else editedTaskName.value = props.task.name
+const changeTask = () => {
+    if(editedTaskName.value){
+        const newTask: SentTask = {
+            description: taskDescription.value,
+            name: editedTaskName.value,
+            date: taskDate.value,
+            time: taskTime.value,
+            completed : taskDone.value,
+        }
+        trelloBoard.editTask(props.task, newTask)
+        emit('hide-modal')
+    }
+    else taskNameForm.value?.focus()
 }
 </script>
 
 <template>
-    <div @click.self="emit('hide-modal')"
+    <div @click.self="changeTask"
 	    class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
       <div class="relative top-[60px] mx-auto p-5 border  shadow-lg rounded-md bg-white w-3/4 md:w-2/5" >
 	      <div>
@@ -49,8 +56,7 @@ const editTaskName = () => {
                 class="w-full px-3 py-3 mb-10 mt-2 shadow-gray-400 shadow focus:outline-blue-500" 
                 placeholder="enter task name ..."
                 v-model="editedTaskName" 
-                ref="taskNameForm"
-                @change="editTaskName">
+                ref="taskNameForm">
 
             <svg 
                 xmlns="http://www.w3.org/2000/svg" 
@@ -109,16 +115,19 @@ const editTaskName = () => {
                 v-model="taskTime">
             
             <div class="flex space-x-3">
-                <input type="checkbox" class="form-checkbox h-5 w-5 text-gray-600">
+                <input 
+                type="checkbox" 
+                class="form-checkbox h-5 w-5 text-gray-600"
+                v-model="taskDone">
                 <span>I completed this task</span>
             </div>
             
-            <div class="items-center px-4 py-3">
-                <!-- <button
-                    @click="showModal = false"
-                    class="px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300">
-                    OK
-                </button> -->
+            <div class="items-center pb-3 pt-8">
+                <button
+                    @click="changeTask"
+                    class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-green-300">
+                    SAVE
+                </button>
             </div>
 	    </div>
     </div>
