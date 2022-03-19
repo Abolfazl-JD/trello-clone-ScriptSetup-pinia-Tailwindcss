@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import BoardTask from './BoardTask.vue'
-import { boardColumns } from '../stores/board'
 import { ref } from 'vue'
 import type { Column } from '../types'
+
+import { boardColumns } from '../stores/board'
+const trelloBoard = boardColumns()
 
 interface propsType{
     column : Column,
@@ -10,6 +12,7 @@ interface propsType{
 }
 const props = defineProps<propsType>()
 
+// new task name form 
 const textarea = ref<HTMLInputElement | null>(null)
 
 const showTaskNameForm = ref(false)
@@ -18,25 +21,29 @@ const showlistControl = ref(false)
 const toggleTaskNameForm = (val: boolean) => {
   showTaskNameForm.value = val
   setTimeout(() => {
+      // no focus when there is no form
       val ? textarea.value?.focus() : null
+
       showlistControl.value = val
   }, 50);
 }
 
-const trelloBoard = boardColumns()
+// new task name form value
 const newTaskName = ref('')
 
 const addNewTask = () => {
     if(newTaskName.value){
         trelloBoard.addTask(newTaskName.value, props.colIndex)
         newTaskName.value = ''
+        // focus on new task name form; again, So user can add task name again
         textarea.value?.focus()
     }
 }
 
-
+// enability to edit column name
 const editColName = ref(false)
 const newColName = ref(props.column.name)
+// edit column name form input
 const colNameForm = ref<HTMLInputElement | null>(null)
 
 const visibleEditColForm = () => {
@@ -47,11 +54,14 @@ const visibleEditColForm = () => {
 }
 
 const changeColName = () => {
+  // hide edit column name form 
   editColName.value = false
+
   if(newColName.value){
     trelloBoard.editColName(props.colIndex, newColName.value)
   }
   else {
+    // reset column name to its previous version
     newColName.value = props.column.name
   }
 }
@@ -67,9 +77,13 @@ const deleteColumn = () => {
           <div 
             @click="visibleEditColForm"
             class="grow">
-            <h3 v-if="!editColName" class="font-bold text-cyan-900 pl-2">
+            <h3 
+              v-if="!editColName" 
+              class="font-bold text-cyan-900 pl-2">
               {{ column.name }}
             </h3>
+
+            <!-- edit column name form -->
             <input
               v-else
               v-model="newColName" 
@@ -90,7 +104,10 @@ const deleteColumn = () => {
             viewBox="0 0 24 24" 
             stroke="currentColor" 
             stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              <path 
+                stroke-linecap="round" 
+                stroke-linejoin="round" 
+                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
           </svg>
         </div>
 
@@ -103,11 +120,13 @@ const deleteColumn = () => {
         />
 
         <p 
-            @click="toggleTaskNameForm(true)" 
-            v-if="!showTaskNameForm" 
-            class="bg-transparent text-gray-500 pl-3 mt-3 py-1 transition-colors ease-out duration-200 rounded hover:bg-gray-400/50 hover:text-gray-700">
-            + Add a card
+          @click="toggleTaskNameForm(true)" 
+          v-if="!showTaskNameForm" 
+          class="bg-transparent text-gray-500 pl-3 mt-3 py-1 transition-colors ease-out duration-200 rounded hover:bg-gray-400/50 hover:text-gray-700">
+          + Add a card
         </p>
+
+        <!-- new task name form   -->
         <template v-else>
           <textarea 
             ref="textarea"
@@ -122,7 +141,9 @@ const deleteColumn = () => {
             :class="!showlistControl ? 'h-0 overflow-hidden' : 'h-8'">
             <button 
                 @click="addNewTask"
-                class="bg-blue-600 py-2 px-[10px] rounded-sm text-sm text-white hover:bg-blue-700 transition-colors ease-out duration-300">Add task</button>
+                class="bg-blue-600 py-2 px-[10px] rounded-sm text-sm text-white hover:bg-blue-700 transition-colors ease-out duration-300">
+                Add task
+            </button>
             <svg
               @click="toggleTaskNameForm(false)"    
               class="h-6 w-6 text-gray-700 transition-colors ease-out duration-200 hover:text-gray-900" 
