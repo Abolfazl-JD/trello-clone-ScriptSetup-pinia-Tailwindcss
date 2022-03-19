@@ -1,28 +1,33 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { boardColumns } from './stores/board'
 import BoardColumn from './components/BoardColumn.vue'
 
+import { boardColumns } from './stores/board'
+const trelloBoard = boardColumns()
+
+// new column name form
 const formInp = ref<HTMLInputElement | null>(null)
 
+//enability to add column(list)
 const addNewList = ref(false)
 const showlistControl = ref(false)
 
 const toggleColNameForm = (val: boolean) => {
   addNewList.value = val
   setTimeout(() => {
+    // no focus when there is no form
     val ? formInp.value?.focus() : null
     showlistControl.value = val
   }, 50); 
 }
 
-const trelloBoard = boardColumns()
 
 const newColumnName = ref('')
 const addColumn = () => {
   if(newColumnName.value) {
     trelloBoard.addColumn(newColumnName.value)
     newColumnName.value = ''
+    // focus on new column name , So user can add column again
     formInp.value?.focus()
   }
 }
@@ -47,7 +52,9 @@ const addColumn = () => {
           v-if="!addNewList"
           class="w-full h-full" 
           @click="toggleColNameForm(true)">+ Add another list</p>
+
         <template v-else>
+          <!-- new column form -->
           <input 
             type="text" 
             ref="formInp" 
@@ -55,6 +62,8 @@ const addColumn = () => {
             placeholder="Enter list title..." 
             @keyup.enter="addColumn" 
             class="px-3 py-2 text-sm w-full focus:outline-blue-600">
+          
+          <!-- form control actions -->
           <div 
             class="flex w-full mt-2 place-items-center space-x-2 transition-all ease-out duration-50" 
             :class="!showlistControl ? 'h-0 overflow-hidden' : 'h-8'">
@@ -62,7 +71,9 @@ const addColumn = () => {
               @click="addColumn" 
               class="bg-blue-600 py-2 px-[10px] rounded-sm text-sm text-white hover:bg-blue-700 transition-colors ease-out duration-300">
                 Add list
-              </button>
+            </button>
+
+            <!-- close new column form icon -->
             <svg 
               @click="toggleColNameForm(false)" 
               class="h-6 w-6 text-gray-700 transition-colors ease-out duration-200 hover:text-gray-900" 
@@ -71,7 +82,10 @@ const addColumn = () => {
               viewBox="0 0 24 24" 
               stroke="currentColor" 
               stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              <path 
+                stroke-linecap="round" 
+                stroke-linejoin="round" 
+                d="M6 18L18 6M6 6l12 12" />
             </svg>
           </div>
         </template>
