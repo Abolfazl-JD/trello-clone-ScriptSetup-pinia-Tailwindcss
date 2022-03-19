@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import type {Task, SentTask} from '../types'
+
 import {boardColumns} from '../stores/board'
+const trelloBoard = boardColumns()
 
 interface PropsType{
     task : Task,
@@ -17,10 +19,11 @@ const emit = defineEmits<{
 
 const taskNameForm = ref<HTMLInputElement | null>(null)
 onMounted(() => {
+    // focus on task name input form
     taskNameForm.value?.focus()
 })
 
-const trelloBoard = boardColumns()
+// form 
 const editedTaskName = ref(props.task.name)
 const taskDescription = ref(props.task.description)
 const taskDate = ref(props.task.date)
@@ -28,6 +31,7 @@ const taskTime = ref(props.task.time)
 const taskDone = ref(props.task.completed)
 
 const changeTask = () => {
+    // if task name input form wasn't empty
     if(editedTaskName.value){
         const newTask: SentTask = {
             description: taskDescription.value,
@@ -37,6 +41,7 @@ const changeTask = () => {
             completed : taskDone.value,
         }
         trelloBoard.editTask(props.task, newTask)
+        // close the modal
         emit('hide-modal')
     }
     else taskNameForm.value?.focus()
@@ -48,11 +53,19 @@ const deleteTask = () => {
 </script>
 
 <template>
-    <div @click.self="changeTask"
+    <div 
+        @click.self="changeTask"
 	    class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
       <div class="relative top-[60px] mx-auto p-5 border  shadow-lg rounded-md bg-white w-3/4 md:w-2/5" >
 	      <div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block text-gray-700 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <!-- task name form -->
+            <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                class="h-5 w-5 inline-block text-gray-700 mr-2" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor" 
+                stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
             </svg>
             <h3 class="mb-1 font-extrabold text-gray-700 inline-block">Name</h3>
@@ -63,6 +76,7 @@ const deleteTask = () => {
                 v-model="editedTaskName" 
                 ref="taskNameForm">
 
+            <!-- description form -->
             <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 class="h-5 w-5 inline-block text-gray-700 mr-2" 
@@ -82,7 +96,8 @@ const deleteTask = () => {
                 placeholder="Enter a description for this task..." 
                 rows="3"
                 v-model="taskDescription"/>
-            
+
+            <!-- choose date form -->
             <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 class="h-5 w-5 inline-block text-gray-700 mr-2" 
@@ -101,6 +116,7 @@ const deleteTask = () => {
                 class="w-full px-3 py-3 mb-10 mt-2 shadow-gray-400 shadow focus:outline-blue-500"
                 v-model="taskDate">
 
+            <!-- choose time form -->
             <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 class="h-5 w-5 inline-block text-gray-700 mr-2" 
@@ -119,6 +135,7 @@ const deleteTask = () => {
                 class="w-full px-3 py-3 mb-8 cursor-pointe10 mt-2 shadow-gray-400 shadow focus:outline-blue-500"
                 v-model="taskTime">
             
+            <!-- completed task form is visible if user has choosen the date for task -->
             <div class="flex space-x-3" v-if="taskDate">
                 <input 
                 type="checkbox" 
