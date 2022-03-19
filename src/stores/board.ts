@@ -43,6 +43,14 @@ export const boardColumns = defineStore({
 
     editTask(task : Task, newTask : SentTask) {
       Object.assign(task, newTask)
+    },
+
+    toggleCheckTask(task: Task) {
+      task.completed = !task.completed
+    },
+
+    archiveTask(deletedTask: Task, colIndex : number) {
+      this.columns[colIndex].tasks = this.columns[colIndex].tasks.filter(task => task.id !== deletedTask.id)
     }
   }
 })

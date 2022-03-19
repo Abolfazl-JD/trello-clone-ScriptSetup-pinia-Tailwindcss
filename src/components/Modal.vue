@@ -5,6 +5,7 @@ import {boardColumns} from '../stores/board'
 
 interface PropsType{
     task : Task,
+    colIndex : number
 }
 
 const props = defineProps<PropsType>()
@@ -39,6 +40,10 @@ const changeTask = () => {
         emit('hide-modal')
     }
     else taskNameForm.value?.focus()
+}
+
+const deleteTask = () => {
+    trelloBoard.archiveTask(props.task, props.colIndex)
 }
 </script>
 
@@ -114,7 +119,7 @@ const changeTask = () => {
                 class="w-full px-3 py-3 mb-8 cursor-pointe10 mt-2 shadow-gray-400 shadow focus:outline-blue-500"
                 v-model="taskTime">
             
-            <div class="flex space-x-3">
+            <div class="flex space-x-3" v-if="taskDate">
                 <input 
                 type="checkbox" 
                 class="form-checkbox h-5 w-5 text-gray-600"
@@ -122,7 +127,12 @@ const changeTask = () => {
                 <span>I completed this task</span>
             </div>
             
-            <div class="items-center pb-3 pt-8">
+            <div class="flex gap-4 items-center pb-3 pt-8">
+                <button
+                    @click="deleteTask"
+                    class="px-4 py-2 text-red-800 border-2 border-solid border-red-700 font-bold rounded-md w-full shadow-sm hover:bg-red-700 hover:text-white transition ease-out duration-200">
+                    DELETE THIS TASK
+                </button>
                 <button
                     @click="changeTask"
                     class="px-4 py-2 bg-blue-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-green-300">
