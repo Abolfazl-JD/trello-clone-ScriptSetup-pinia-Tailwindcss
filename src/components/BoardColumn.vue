@@ -69,10 +69,44 @@ const changeColName = () => {
 const deleteColumn = () => {
   trelloBoard.archiveColumn(props.colIndex)
 }
+
+//drag and drop methods
+const pickupColumn = (e: DragEvent) => {
+  if(e.dataTransfer){
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.dropEffect = 'move'
+    e.dataTransfer.setData('from-column-index', String(props.colIndex))
+    e.dataTransfer.setData('type', 'moveColumn')
+  }
+}
+
+const moveTaskOrColumn = (e: DragEvent) => {
+  const type = e.dataTransfer?.getData('type')
+  if (type === 'moveTask') moveTask(e, props.colIndex)
+  else moveColumn(e, props.colIndex)
+}
+
+const moveTask = (e: DragEvent, toColumnIndex: number) => {
+  const fromColumnIndex = e.dataTransfer?.getData('from-column-index')
+  const taskIndex = e.dataTransfer?.getData('task-index')
+
+  trelloBoard.moveTask(Number(fromColumnIndex), toColumnIndex, Number(taskIndex))
+}
+
+const moveColumn = (e: DragEvent, toColumnIndex: number) => {
+  const fromColumnIndex = e.dataTransfer?.getData('from-column-index')
+  trelloBoard.moveColumn(Number(fromColumnIndex), toColumnIndex)
+}
 </script>
 
 <template>
-    <div class="min-w-[280px] bg-gray-300 p-2 rounded-lg cursor-pointer">
+    <div 
+      class="min-w-[280px] bg-gray-300 p-2 rounded-lg cursor-pointer select-none"
+      draggable="true"
+      @dragover.prevent
+      @dragenter.prevent
+      @dragstart.self="pickupColumn($event)"
+      @drop="moveTaskOrColumn($event)">
         <div class="flex justify-between mb-2 space-x-2">
           <div 
             @click="visibleEditColForm"
@@ -133,6 +167,7 @@ const deleteColumn = () => {
             v-model="newTaskName"
             @keyup.enter="addNewTask"
             @keyup.esc="toggleTaskNameForm(false)"
+            @blur="addNewTask"
             class="rounded w-full p-2 placeholder:text-sm shadow-gray-400 shadow outline-none mt-2" 
             placeholder="Enter a title for this task..." 
             rows="3"/>

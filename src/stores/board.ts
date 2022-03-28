@@ -51,6 +51,20 @@ export const boardColumns = defineStore({
 
     archiveTask(deletedTask: Task, colIndex : number) {
       this.columns[colIndex].tasks = this.columns[colIndex].tasks.filter(task => task.id !== deletedTask.id)
-    }
+    },
+
+    moveTask(fromColumnIndex : number, toColumnIndex: number, taskIndex: number) {
+      const taskToMove = this.columns[fromColumnIndex].tasks.splice(
+        taskIndex,
+        1
+      )[0]
+      this.columns[toColumnIndex].tasks.push(taskToMove)
+    },
+
+    moveColumn(fromColumnIndex: number, toColumnIndex: number) {
+      const columnList = this.columns
+      const columnToMove = columnList.splice(fromColumnIndex, 1)[0]
+      columnList.splice(toColumnIndex, 0, columnToMove)
+    },
   }
 })

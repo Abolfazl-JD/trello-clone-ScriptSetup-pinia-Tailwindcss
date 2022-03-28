@@ -20,10 +20,23 @@ const toggleCheckTask = () => {
     trelloBoard.toggleCheckTask(props.task)
 }
 
+//drag and drop api methods
+const pickupTask = (e: DragEvent) => {
+    if(e.dataTransfer){
+        e.dataTransfer.dropEffect = 'move'
+        e.dataTransfer.effectAllowed = 'move'
+        e.dataTransfer.setData('from-column-index', String(props.colIndex))
+        e.dataTransfer.setData('task-index', String(props.taskIndex))
+        e.dataTransfer.setData('type', 'moveTask')
+    }
+}
 </script>
 
 <template>
-    <div class="bg-white px-2 pb-[5px] pt-2 rounded mt-2 shadow shadow-gray-400">
+    <div 
+        class="bg-white px-2 pb-[5px] pt-2 rounded mt-2 shadow shadow-gray-400 select-none"
+        draggable="true" 
+        @dragstart="pickupTask($event)">
         <div class="flex justify-between group"  @click="showModal = true">
             <p class="text-sm">{{ task.name }}</p>
             <svg 
