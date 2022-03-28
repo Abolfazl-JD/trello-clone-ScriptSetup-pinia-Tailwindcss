@@ -144,10 +144,10 @@ const deleteTask = () => {
                 <span>I completed this task</span>
             </div>
             
-            <div class="flex gap-4 items-center pb-3 pt-8">
+            <div class="md:flex gap-4 md:items-center pb-3 pt-8">
                 <button
                     @click="deleteTask"
-                    class="px-4 py-2 text-red-800 border-2 border-solid border-red-700 font-bold rounded-md w-full shadow-sm hover:bg-red-700 hover:text-white transition ease-out duration-200">
+                    class="px-4 py-2 mb-3 md:mb-0 text-red-800 border-2 border-solid border-red-700 font-bold rounded-md w-full shadow-sm hover:bg-red-700 hover:text-white transition ease-out duration-200">
                     DELETE THIS TASK
                 </button>
                 <button
